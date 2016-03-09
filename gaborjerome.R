@@ -71,7 +71,7 @@ draw.stim = function(side){
 
 KEYS <<- c(Key.Left, Key.Right)
 
-trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000, withscale = 1, feedback = 0){
+trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000, withscale = 1, feedback = 0, scale = 'pas'){
     ## Kod specyficzny dla zadania
     ## ...
     ## Szablon
@@ -153,6 +153,7 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
                 }
             }
         }, 'draw-scale' = {
+            WINDOW$set.mouse.cursor.visible(T)
             if(((CLOCK$time - scale.onset) > SCALE.MAX.DURATION) ||
                (BUTTON.PRESSED[1] > scale.onset)){
                     scale.rt = BUTTON.PRESSED[1] - scale.onset
@@ -165,9 +166,26 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
             }else{
                 WINDOW$clear(c(.5, .5, .5))
                 WINDOW$draw(m)
-                mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem bardzo wyraźnie'),
-                                     K = c('Nic nie widziałam', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
-                                     background.color = c(.5, .5, .5), position = scale.position)
+                switch(as.character(scale),
+                       'pas' = {
+                           mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem niewyraźnie', 'Widziałem dość wyraźnie', 'Widziałem bardzo wyraźnie'),
+                                                K = c('Nic nie widziałam', 'Widziałam niewyraźnie', 'Widziałam dość wyraźnie', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = F)
+                       },
+                       'cpas' = {
+                           mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem niewyraźnie', 'Widziałem dość wyraźnie', 'Widziałem bardzo wyraźnie'),
+                                                K = c('Nic nie widziałam', 'Widziałam niewyraźnie', 'Widziałam dość wyraźnie', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = T)
+                       },
+                       'ias' = {
+                           mp = draw.scale(rep("", 11), gradient  = T,
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = F)
+                       },
+                       'cs' = {
+                           mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem bardzo wyraźnie'),
+                                                K = c('Nic nie widziałam', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = T)
+                       })
                 WINDOW$display()
             }
         }, 'show-leftright' = {
@@ -220,48 +238,9 @@ TASK.NAME <<- 'gaborjerome'
 ## cnd = gui.choose.item(dir('./condition/'))
 cnd = source.random.condition()
 source(paste('./condition/', cnd, sep = ''))
-
-gui.show.instruction("W czasie eksperymentu obowiązuje cisza. Wyłącz telefon komórkowy. W razie jakichkolwiek wątpliwości nie wołaj osoby prowadzącej, tylko podnieś do góry rękę - osoba prowadząca podejdzie w dogodnym momencie i postara się udzielić wszelkich wyjaśnień. 
-Badanie jest anonimowe. Za chwilę zostaniesz poproszona/y o podanie danych: wieku, płci oraz pseudonimu. Pseudonim składa się z inicjałów (małymi literami) oraz czterech cyfr: dnia 
-i miesiąca urodzenia (np.  ms0706). 
-")
-gui.user.data()
-
-## Trening1: 18 prób, czas prezentacji 512, feedback, bez skali
-gui.show.instruction(list(K = "Badanie dotyczy percepcji oraz świadomości wzrokowej.
-Twoim głównym zadaniem będzie decydowanie, czy czarno-białe paski pojawiające się na ekranie są pochylone w lewą czy w prawą stronę. Paski będą czasami prezentowane bardzo krótko, jeśli nie będziesz widziała, w którą stronę są pochylone, po prostu zgaduj. 
-Twoim drugim zadaniem będzie odpowiedź na pytanie jak dobrze widziałaś wzroki. Będziesz zaznaczać ją na skali opisanej od „nic nie widziałam” do „widziałam bardzo wyraźnie”.
-W trakcie trwania wszystkich zadań siedź na wprost ekranu oraz nie przysuwaj ani nie oddalaj się od monitora.Teraz odbędzie się pierwszy trening, żebyś zobaczyła jak wyglądają czarno-białe paski.
-Na początku każdej „próby” na środku ekranu pojawi się krzyżyk. Staraj się koncentrować na nim swój wzrok. Po zniknięciu krzyżyka na ekranie pojawią się czarno-białe paski, które następnie zostaną przesłonięte czarno-białą szachownicą. Gdy pojawią się opcje „prawo – lewo” wciśnij strzałkę w lewo, jeśli paski były pochylone w lewo, a strzałkę w prawo, jeśli paski były pochylone w prawo.",
-                          M = "Badanie dotyczy percepcji oraz świadomości wzrokowej.
-Twoim głównym zadaniem będzie decydowanie, czy czarno-białe paski pojawiające się na ekranie są pochylone w lewą czy w prawą stronę. Paski będą czasami prezentowane bardzo krótko, jeśli nie będziesz widział, w którą stronę są pochylone, po prostu zgaduj. 
-Twoim drugim zadaniem będzie odpowiedź na pytanie jak dobrze widziałeś wzroki. Będziesz zaznaczać ją na skali opisanej od „nic nie widziałem” do „widziałem bardzo wyraźnie”.
-W trakcie trwania wszystkich zadań siedź na wprost ekranu oraz nie przysuwaj ani nie oddalaj się od monitora.
-Teraz odbędzie się pierwszy trening, żebyś zobaczył jak wyglądają czarno-białe paski.
-Na początku każdej „próby” na środku ekranu pojawi się krzyżyk. Staraj się koncentrować na nim swój wzrok. Po zniknięciu krzyżyka na ekranie pojawią się czarno-białe paski, które następnie zostaną przesłonięte czarno-białą szachownicą. Gdy pojawią się opcje „prawo – lewo” wciśnij strzałkę w lewo, jeśli paski były pochylone w lewo, a strzałkę w prawo, jeśli paski były pochylone w prawo.")[[USER.DATA$gender]])
-run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'),
-                                                    decorder = 'type1', withscale = 0, feedback = 1,
-                                                    duration = 512), b = 9)
-
-## Trening2: 6 prób, czas prezentacji 128, feedback, bez skali
-gui.show.instruction("Teraz będzie drugi trening, w którym paski będą wyświetlane krócej.")
-run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'),
-                                                    decorder = 'type1', withscale = 0, feedback = 1,
-                                                    duration = 128), b = 3)
-
-## Trening3: 8 prób, czasy prezentacji wszystkie, bez feedkacku, skala
-gui.show.instruction(INSTR)
-run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'),
-                           decorder = ORDER, withscale = 1, feedback = 0,
-                           duration = c(16, 128, 32, 64)), b = 1)
-
-## Etap właściwy
-gui.show.instruction('Teraz zacznie się właściwe zadanie, które będzie wyglądać dokładnie tak samo jak trzeci trening. Będzie przedzielone przerwami. Pamiętaj, aby siedzieć na wprost ekranu oraz nie przybliżać ani nie oddalać się od monitora. Zadanie potrwa kilkanaście minut.')
-run.trials(trial.code, condition = cnd, record.session = T,
-                        decorder = ORDER, withscale = 1, feedback = 0,
-                        expand.grid(side = c('left', 'right'),
-                                    duration = c(16, 128, 32, 32, 64, 64)), b = 12)
-                       
-gui.show.instruction("To już koniec tego zadania. Dziękujemy. Proszę pozostać na swoim miejscu do czasu, gdy osoba prowadząca badanie nie poda dalszych instrukcji.")
+## Skale to pas, cpas, ias, cs
+run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = 'cs',
+                                                    decorder = 'type1', withscale = 1, feedback = 1,
+                                                    duration = 512))
 
 if(!interactive())quit("no")
