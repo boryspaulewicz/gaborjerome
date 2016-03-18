@@ -235,7 +235,8 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
 
 TASK.NAME <<- 'gaborjerome'
 
-cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
+## cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
+cnd = 'pas' ## może być też 'cpas', 'ias', albo 'cs'
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd,
                                                     decorder = 'type1', withscale = 1, feedback = 1,
                                                     duration = 512))
