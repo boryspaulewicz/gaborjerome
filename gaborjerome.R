@@ -157,9 +157,9 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
     
             state = 'measure-reaction'
         }, 'measure-reaction' = {
-            if(any(BUTTON.PRESSED[1:2] > leftright.onset) || ((CLOCK$time - leftright.onset) > MAX.REACTION.TIME)){
+            if(any(BUTTON.PRESSED[1:2] > stim.onset) || ((CLOCK$time - leftright.onset) > MAX.REACTION.TIME)){
                 response = which(BUTTON.PRESSED[1:2] > leftright.onset)
-                rt = BUTTON.PRESSED[response] - leftright.onset
+                rt = BUTTON.PRESSED[response] - stim.onset
                 acc = as.numeric(response == c(left = 1, right = 2)[side])
                 if(withscale == 1){
                     scale.onset = CLOCK$time
@@ -227,7 +227,7 @@ TASK.NAME <<- 'gaborjerome'
 
 ## cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
 cnd = 'pas' ## może być też 'cpas', 'ias', albo 'cs'
-
+USER.DATA <<- list(name = 'bp0000', age = 37, gender = 'M')
 ## system('libreoffice Instrukcja0.docx')
 
 ## Trening 1, 500 ms 8 prób bez skali
