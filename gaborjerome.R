@@ -71,7 +71,7 @@ draw.stim = function(side){
 
 KEYS <<- c(Key.Left, Key.Right)
 
-trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000, withscale = 1, feedback = 0, scale = 'pas'){
+trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feedback = 0, scale = 'pas'){
     ## Kod specyficzny dla zadania
     ## ...
     ## Szablon
@@ -144,12 +144,33 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
                 state = 'mask-present'
             }
         }, 'mask-present' = {
-            if((CLOCK$time - mask.onset) > LONELY.MASK.DURATION){
-                if((decorder == 'type2') && (withscale == 1)){
+            if((CLOCK$time - mask.onset) > LONELY.MASK.DURATION)state = 'show-leftright'
+        }, 'show-leftright' = {
+            WINDOW$clear(c(.5, .5, .5))
+            WINDOW$draw(m)
+            TXT$set.string("LEWO     PRAWO")
+            center(TXT, WINDOW)
+            TXT$set.position(c(WINDOW$get.size()[1] / 2, WINDOW$get.size()[2] * scale.position))
+            WINDOW$draw(TXT)
+            WINDOW$display()
+            leftright.onset = CLOCK$time
+    
+            state = 'measure-reaction'
+        }, 'measure-reaction' = {
+            if(any(BUTTON.PRESSED[1:2] > leftright.onset) || ((CLOCK$time - leftright.onset) > MAX.REACTION.TIME)){
+                response = which(BUTTON.PRESSED[1:2] > leftright.onset)
+                rt = BUTTON.PRESSED[response] - leftright.onset
+                acc = as.numeric(response == c(left = 1, right = 2)[side])
+                if(withscale == 1){
                     scale.onset = CLOCK$time
                     state = 'draw-scale'
                 }else{
-                    state = 'show-leftright'
+                    if(feedback == 1){
+                        feedback.onset = CLOCK$time
+                        state = 'feedback'
+                    }else{
+                        state = 'done'
+                    }
                 }
             }
         }, 'draw-scale' = {
@@ -158,11 +179,7 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
                (BUTTON.PRESSED[1] > scale.onset)){
                     scale.rt = BUTTON.PRESSED[1] - scale.onset
                     scale.value = mp[1]
-                    if(decorder == 'type2'){
-                        state = 'show-leftright'
-                    }else{
-                        state = 'done'
-                    }
+                    state = 'done'
             }else{
                 WINDOW$clear(c(.5, .5, .5))
                 WINDOW$draw(m)
@@ -188,36 +205,10 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
                        })
                 WINDOW$display()
             }
-        }, 'show-leftright' = {
-            WINDOW$clear(c(.5, .5, .5))
-            WINDOW$draw(m)
-            TXT$set.string("LEWO     PRAWO")
-            center(TXT, WINDOW)
-            TXT$set.position(c(WINDOW$get.size()[1] / 2, WINDOW$get.size()[2] * scale.position))
-            WINDOW$draw(TXT)
-            WINDOW$display()
-            leftright.onset = CLOCK$time
-            CORRECT.KEY <<- c(left = Key.Left, right = Key.Right)[side]
-            ACC <<- RT <<- NULL
-            state = 'measure-reaction'
-        }, 'measure-reaction' = {
-            if(!is.null(ACC) || ((CLOCK$time - leftright.onset) > MAX.REACTION.TIME)){
-                if((decorder == 'type1') && (withscale == 1)){
-                    scale.onset = CLOCK$time
-                    state = 'draw-scale'
-                }else{
-                    if(feedback == 1){
-                        feedback.onset = CLOCK$time
-                        state = 'feedback'
-                    }else{
-                        state = 'done'
-                    }
-                }
-            }
         }, 'feedback' = {
             if((CLOCK$time - feedback.onset) < FEEDBACK.TIME){
                 WINDOW$clear(c(.5, .5, .5))
-                TXT$set.string(c('Źle', 'Dobrze', 'Za późno')[ifelse(is.null(ACC), 3, ACC + 1)])
+                TXT$set.string(c('Źle', 'Dobrze', 'Za późno')[ifelse(rt > MAX.REACTION.TIME, 3, acc + 1)])
                 WINDOW$draw(center.win(TXT))
                 WINDOW$display()
             }else{
@@ -227,8 +218,7 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
             WINDOW$clear(c(.5, .5, .5))
             WINDOW$display()
             return(list(scalert = scale.rt, scalevalue = scale.value,
-                        rt = ifelse(is.null(RT), MAX.REACTION.TIME, RT - stim.onset),
-                        acc = ifelse(is.null(ACC), 2, ACC)))
+                        rt = rt, acc = acc))
         })
     }
 }
@@ -237,8 +227,10 @@ TASK.NAME <<- 'gaborjerome'
 
 ## cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
 cnd = 'pas' ## może być też 'cpas', 'ias', albo 'cs'
+
+system('libreoffice Instrukcja0.docx')
+
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd,
-                                                    decorder = 'type1', withscale = 1, feedback = 1,
-                                                    duration = 512))
+                                                    withscale = 1, feedback = 1, duration = 512))
 
 if(!interactive())quit("no")
