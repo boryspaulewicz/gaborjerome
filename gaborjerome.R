@@ -71,7 +71,7 @@ draw.stim = function(side){
 
 KEYS <<- c(Key.Left, Key.Right)
 
-trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feedback = 0, scale = 'pas'){
+trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feedback = 0, scale = 'pas', stage = 'unknown'){
     ## Kod specyficzny dla zadania
     ## ...
     ## Szablon
@@ -228,9 +228,21 @@ TASK.NAME <<- 'gaborjerome'
 ## cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
 cnd = 'pas' ## może być też 'cpas', 'ias', albo 'cs'
 
-system('libreoffice Instrukcja0.docx')
+## system('libreoffice Instrukcja0.docx')
 
+## Trening 1, 500 ms 8 prób bez skali
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd,
-                                                    withscale = 1, feedback = 1, duration = 512))
+                                                    withscale = 0, feedback = 1, duration = 500),
+                                        b = 4)
+
+## Trening 2, 16 prób ze skalą, różne czasy
+run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd, stage = 'trening2',
+                                                    withscale = 1, feedback = 0, duration = c(16, 32, 64, 128)),
+                                        b = 2, record.session = T)
+
+## Etap właściwy, 96 prób ze skalą, różne czasy
+run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd, stage = 'test',
+                                                    withscale = 1, feedback = 0, duration = c(16, 32, 64, 128)),
+                                        b = 12, record.session = T)
 
 if(!interactive())quit("no")
