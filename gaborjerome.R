@@ -4,8 +4,8 @@
 ## Cośtam o dostosowaniu czasu prezentacji maski, żeby cośtam było 328
 
 ## Dwa treningi: czasy standardowo 4 Trening odpowiedzi: 500 ms x 8
-## prób Trening ze skalą: 4 czasy x 16 prób - zapisywanie danych dla
-## treningu ze skalą
+## prób Trening ze skalą: 4 czasy x 16 prób - zapisywanie danych już
+## dla treningu ze skalą
 
 
 if(interactive())source('~/cs/code/r/tasks/task/task.R')
@@ -235,11 +235,8 @@ trial.code = function(trial, side = 'left', decorder = 'type1', duration = 1000,
 
 TASK.NAME <<- 'gaborjerome'
 
-## cnd = gui.choose.item(dir('./condition/'))
-cnd = source.random.condition()
-source(paste('./condition/', cnd, sep = ''))
-## Skale to pas, cpas, ias, cs
-run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = 'cs',
+cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
+run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd,
                                                     decorder = 'type1', withscale = 1, feedback = 1,
                                                     duration = 512))
 
