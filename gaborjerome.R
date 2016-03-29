@@ -226,9 +226,13 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
 TASK.NAME <<- 'gaborjerome'
 
 ## cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
+
+## Wybieramy na początek zawsze PAS-a, nie pytamy o dane osobowe
 cnd = 'pas' ## może być też 'cpas', 'ias', albo 'cs'
 USER.DATA <<- list(name = 'bp0000', age = 37, gender = 'M')
-## system('libreoffice Instrukcja0.docx')
+
+## Tak się uruchamia w danym momencie określoną instrukcję
+system('libreoffice Instrukcja0.docx')
 
 ## Trening 1, 500 ms 8 prób bez skali
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd,
