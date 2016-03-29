@@ -223,30 +223,49 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
     }
 }
 
+docx.instr = function(file){
+    res = 'Tak'
+    while(res == 'Tak'){
+        system(sprintf('libreoffice %s', file))
+        res = gui.show.isntruction('Czy chcesz jeszcze raz zobaczyć instrukcję?', c('Nie', 'Tak'))
+    }
+}
+
 TASK.NAME <<- 'gaborjerome'
 
-## cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
+cnd = db.random.condition(c('pas', 'cpas', 'ias', 'cs'))
 
-## Wybieramy na początek zawsze PAS-a, nie pytamy o dane osobowe
-cnd = 'pas' ## może być też 'cpas', 'ias', albo 'cs'
-USER.DATA <<- list(name = 'bp0000', age = 37, gender = 'M')
+docx.instr(c(pas = 'InstrukcjaPAS.docx', cpas = 'InstrukcjaCPAS.docx', ias = 'InstrukcjaIAS.docx', cs = 'InstrukcjaCS.docx')[cnd])
+
+## ## Wybieramy na początek zawsze PAS-a, nie pytamy o dane osobowe
+## cnd = 'pas' ## może być też 'cpas', 'ias', albo 'cs'
 
 ## Tak się uruchamia w danym momencie określoną instrukcję
-system('libreoffice Instrukcja0.docx')
+docx.instr('Instrukcja0.docx')
+
+gui.user.data()
+
+docx.instr('Instrukcja1.docx')
 
 ## Trening 1, 500 ms 8 prób bez skali
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd,
                                                     withscale = 0, feedback = 1, duration = 500),
                                         b = 4)
 
+docx.instr('Instrukcja2.docx')
+
 ## Trening 2, 16 prób ze skalą, różne czasy
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd, stage = 'trening2',
                                                     withscale = 1, feedback = 0, duration = c(16, 32, 64, 128)),
                                         b = 2, record.session = T)
 
+docx.instr('Instrukcja3.docx')
+
 ## Etap właściwy, 96 prób ze skalą, różne czasy
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd, stage = 'test',
                                                     withscale = 1, feedback = 0, duration = c(16, 32, 64, 128)),
                                         b = 12, record.session = T)
+
+docx.instr('Instrukcja4.docx')
 
 if(!interactive())quit("no")
