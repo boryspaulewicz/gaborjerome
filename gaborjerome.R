@@ -161,7 +161,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
             state = 'measure-reaction'
         }, 'measure-reaction' = {
             if(any(BUTTON.PRESSED[1:2] > stim.onset) || ((CLOCK$time - leftright.onset) > MAX.REACTION.TIME)){
-                response = which(BUTTON.PRESSED[1:2] > leftright.onset)
+                response = which(BUTTON.PRESSED[1:2] > stim.onset)
                 rt = BUTTON.PRESSED[response] - stim.onset
                 acc = as.numeric(response == c(left = 1, right = 2)[side])
                 if(withscale == 1){
