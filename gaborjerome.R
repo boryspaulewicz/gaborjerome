@@ -229,7 +229,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
 docx.instr = function(file){
     res = 'Tak'
     while(res == 'Tak'){
-        system(sprintf('libreoffice %s', file))
+        system(sprintf('libreoffice --view --invisible %s', file))
         res = gui.show.instruction('Czy chcesz jeszcze raz zobaczyć instrukcję?', c('Nie', 'Tak'))
     }
 }
