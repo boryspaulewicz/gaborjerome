@@ -226,11 +226,13 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
     }
 }
 
-docx.instr = function(file){
+docx.instr = function(file, ask.if.done = T){
     res = 'Tak'
     while(res == 'Tak'){
         system(sprintf('libreoffice --view --invisible %s', file))
-        res = gui.show.instruction('Czy chcesz jeszcze raz zobaczyć ostatnią instrukcję?', c('Nie', 'Tak'))
+        if(ask.if.done){
+            res = gui.show.instruction('Czy chcesz jeszcze raz zobaczyć ostatnią instrukcję?', c('Nie', 'Tak'))
+        }else{ break }
     }
 }
 
@@ -269,6 +271,6 @@ run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), s
                                                     withscale = 1, feedback = 0, duration = c(16, 32, 64, 128)),
                                         b = 24, record.session = T)
 
-docx.instr('Instrukcja4.docx')
+docx.instr('Instrukcja4.docx', F)
 
 if(!interactive())quit("no")
