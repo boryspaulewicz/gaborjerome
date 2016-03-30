@@ -264,10 +264,10 @@ run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), s
 
 docx.instr('Instrukcja3.docx')
 
-## Etap właściwy, 96 prób ze skalą, różne czasy
+## Etap właściwy, 96 prób na każdy czas ze skalą, różne czasy
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd, stage = 'test',
                                                     withscale = 1, feedback = 0, duration = c(16, 32, 64, 128)),
-                                        b = 12, record.session = T)
+                                        b = 24, record.session = T)
 
 docx.instr('Instrukcja4.docx')
 
