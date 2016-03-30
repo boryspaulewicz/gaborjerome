@@ -1,5 +1,8 @@
 ## -*- coding: utf-8 -*-
 
+## TODO: catch triale = czas prezentacji 0, żeby sprawdzić, czy nie
+## podają zbyt wysokiej pewności gdy nic nie ma.
+
 ## Kolejność zawsze gabor, skala. Kryjemy gabora maską - szachownicą.
 ## Cośtam o dostosowaniu czasu prezentacji maski, żeby cośtam było 328
 
@@ -227,7 +230,7 @@ docx.instr = function(file){
     res = 'Tak'
     while(res == 'Tak'){
         system(sprintf('libreoffice %s', file))
-        res = gui.show.isntruction('Czy chcesz jeszcze raz zobaczyć instrukcję?', c('Nie', 'Tak'))
+        res = gui.show.instruction('Czy chcesz jeszcze raz zobaczyć instrukcję?', c('Nie', 'Tak'))
     }
 }
 
