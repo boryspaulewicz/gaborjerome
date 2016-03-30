@@ -230,7 +230,7 @@ docx.instr = function(file){
     res = 'Tak'
     while(res == 'Tak'){
         system(sprintf('libreoffice --view --invisible %s', file))
-        res = gui.show.instruction('Czy chcesz jeszcze raz zobaczyć instrukcję?', c('Nie', 'Tak'))
+        res = gui.show.instruction('Czy chcesz jeszcze raz zobaczyć ostatnią instrukcję?', c('Nie', 'Tak'))
     }
 }
 
