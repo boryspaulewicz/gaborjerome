@@ -83,7 +83,6 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
     }else if((trial %% block.length) == 0){
         state = 'break'
     }else{ state = 'show-fixation' }
-    if(WINDOW$is.open())process.inputs()
     start = CLOCK$time
     while(WINDOW$is.open()){
         process.inputs()
