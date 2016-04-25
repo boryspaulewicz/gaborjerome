@@ -107,7 +107,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
         }, 'show-fixation' = {
             WINDOW$clear(c(.5, .5, .5))
             ## Losowa pozycja myszki
-            mouse.set.position(c(runif(1), .5) * WINDOW$get.size())
+            mouse.set.position(c(runif(1, min = .2, max = .8), .5) * WINDOW$get.size())
             ## Punkt fiksacji
             lapply(FX, WINDOW$draw)
             WINDOW$set.mouse.cursor.visible(F)
@@ -159,10 +159,14 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
     
             state = 'measure-reaction'
         }, 'measure-reaction' = {
-            if(any(BUTTON.PRESSED[1:2] > stim.onset) || ((CLOCK$time - leftright.onset) > MAX.REACTION.TIME)){
+            if(any(BUTTON.PRESSED[1:2] > stim.onset) || ((CLOCK$time - stim.onset) > MAX.REACTION.TIME)){
                 response = which(BUTTON.PRESSED[1:2] > stim.onset)
                 rt = BUTTON.PRESSED[response] - stim.onset
                 acc = as.numeric(response == c(left = 1, right = 2)[side])
+                if((CLOCK$time - stim.onset) > MAX.REACTION.TIME){
+                    rt = MAX.REACTION.TIME
+                    acc = 2
+                }
                 if(withscale == 1){
                     scale.onset = CLOCK$time
                     state = 'draw-scale'
@@ -210,7 +214,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
         }, 'feedback' = {
             if((CLOCK$time - feedback.onset) < FEEDBACK.TIME){
                 WINDOW$clear(c(.5, .5, .5))
-                TXT$set.string(c('Źle', 'Dobrze', 'Za późno')[ifelse(rt > MAX.REACTION.TIME, 3, acc + 1)])
+                TXT$set.string(c('Źle', 'Dobrze', 'Za późno')[acc + 1])
                 WINDOW$draw(center.win(TXT))
                 WINDOW$display()
             }else{
