@@ -28,7 +28,7 @@ block.length = 24
 sigma = .01
 f = 20
 contrast = .3
-scale.position = .75
+scale.position = .65
 
 ## Globalne obiekty graficzne
 
