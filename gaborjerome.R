@@ -150,7 +150,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
         }, 'show-leftright' = {
             WINDOW$clear(c(.5, .5, .5))
             WINDOW$draw(m)
-            TXT$set.string("LEWO     PRAWO")
+            TXT$set.string("")
             center(TXT, WINDOW)
             TXT$set.position(c(WINDOW$get.size()[1] / 2, WINDOW$get.size()[2] * scale.position))
             WINDOW$draw(TXT)
@@ -241,7 +241,7 @@ docx.instr = function(file, ask.if.done = T){
 
 TASK.NAME <<- 'gaborjerome'
 
-cnd = db.random.condition(c('ias'))
+cnd = db.random.condition(c('pas'))
 
 docx.instr(c(pas = 'InstrukcjaPAS.docx', cpas = 'InstrukcjaCPAS.docx', ias = 'InstrukcjaIAS.docx', cs = 'InstrukcjaCS.docx')[cnd])
 
