@@ -201,7 +201,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
                                            background.color = c(.5, .5, .5), position = scale.position, draw.bar = T)
                        },
                        'ias' = {
-                           mp = draw.scale(rep(11, ""), gradient  = T,
+                           mp = draw.scale(rep("", 11), gradient  = T,
                                            background.color = c(.5, .5, .5), position = scale.position, draw.bar = F)
                        },
                        'cs' = {
