@@ -18,6 +18,7 @@ if(interactive())source('~/cs/code/r/tasks/task/task.R')
 FIXATION.TIME = 1500
 POST.STIM.TIME = 0
 LONELY.MASK.DURATION = 0
+MASK.DURATION = 200
 SCALE.MAX.DURATION = 100000
 MAX.REACTION.TIME = 4000
 FEEDBACK.TIME = 1000
@@ -107,7 +108,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
         }, 'show-fixation' = {
             WINDOW$clear(c(.5, .5, .5))
             ## Losowa pozycja myszki
-            mouse.set.position(c(runif(1, min = .2, max = .8), .57) * WINDOW$get.size())
+            mouse.set.position(c(runif(1, min = .2, max = .8), .5) * WINDOW$get.size())
             ## Punkt fiksacji
             lapply(FX, WINDOW$draw)
             WINDOW$set.mouse.cursor.visible(F)
@@ -127,6 +128,8 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
             draw.stim(side)
             WINDOW$display()
             stim.onset = CLOCK$time
+            CORRECT.KEY <<- c(left = Key.Left, right = Key.Right)[side]
+            ACC <<- RT <<- NULL
             state = 'gabor-present'
         }, 'gabor-present' = {
             if((CLOCK$time - stim.onset) > duration){
@@ -143,6 +146,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
                 mask.onset = CLOCK$time
                 scale.rt = scale.value = -1
                 mp = 666
+                mask.present = T
                 state = 'mask-present'
             }
         }, 'mask-present' = {
@@ -156,16 +160,17 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
             WINDOW$draw(TXT)
             WINDOW$display()
             leftright.onset = CLOCK$time
-    
             state = 'measure-reaction'
         }, 'measure-reaction' = {
-            if(any(BUTTON.PRESSED[1:2] > stim.onset) || ((CLOCK$time - stim.onset) > MAX.REACTION.TIME)){
-                response = which(BUTTON.PRESSED[1:2] > stim.onset)
-                rt = BUTTON.PRESSED[response] - stim.onset
-                acc = as.numeric(response == c(left = 1, right = 2)[side])
+            if(((CLOCK$time - mask.onset) > MASK.DURATION) & mask.present){
+                WINDOW$clear(c(.5, .5, .5))
+                WINDOW$display()
+                mask.present = F
+            }
+            if(!is.null(ACC) || ((CLOCK$time - stim.onset) > MAX.REACTION.TIME)){
                 if((CLOCK$time - stim.onset) > MAX.REACTION.TIME){
-                    rt = MAX.REACTION.TIME
-                    acc = 2
+                    ACC <<- 2
+                    RT <<- MAX.REACTION.TIME
                 }
                 if(withscale == 1){
                     scale.onset = CLOCK$time
@@ -214,7 +219,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
         }, 'feedback' = {
             if((CLOCK$time - feedback.onset) < FEEDBACK.TIME){
                 WINDOW$clear(c(.5, .5, .5))
-                TXT$set.string(c('Źle', 'Dobrze', 'Za późno')[acc + 1])
+                TXT$set.string(c('Źle', 'Dobrze', 'Za późno')[ACC + 1])
                 WINDOW$draw(center.win(TXT))
                 WINDOW$display()
             }else{
@@ -224,7 +229,7 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
             WINDOW$clear(c(.5, .5, .5))
             WINDOW$display()
             return(list(scalert = scale.rt, scalevalue = scale.value,
-                        rt = rt, acc = acc))
+                        rt = RT, acc = ACC))
         })
     }
 }
