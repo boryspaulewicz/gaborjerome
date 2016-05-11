@@ -229,7 +229,8 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
             WINDOW$clear(c(.5, .5, .5))
             WINDOW$display()
             return(list(scalert = scale.rt, scalevalue = scale.value,
-                        rt = RT, acc = ACC))
+                        rt = ifelse(is.null(RT), MAX.REACTION.TIME, RT - stim.onset),
+                        acc = ifelse(is.null(ACC), 2, ACC)))
         })
     }
 }
