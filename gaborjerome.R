@@ -162,11 +162,6 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
             leftright.onset = CLOCK$time
             state = 'measure-reaction'
         }, 'measure-reaction' = {
-            if(((CLOCK$time - mask.onset) > MASK.DURATION) & mask.present){
-                WINDOW$clear(c(.5, .5, .5))
-                WINDOW$display()
-                mask.present = F
-            }
             if(!is.null(ACC) || ((CLOCK$time - stim.onset) > MAX.REACTION.TIME)){
                 if((CLOCK$time - stim.onset) > MAX.REACTION.TIME){
                     ACC <<- 2
