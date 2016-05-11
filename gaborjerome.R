@@ -72,7 +72,7 @@ draw.stim = function(side){
 
 ## Dwa klawisze w kluczu reakcyjnym
 
-KEYS <<- c([Key.Left + 1], [Key.Right + 1])
+KEYS <<- c(Key.left, Key.right)
 
 trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feedback = 0, scale = 'pas', stage = 'unknown'){
     ## Kod specyficzny dla zadania
