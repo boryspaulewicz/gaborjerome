@@ -23,6 +23,7 @@ SCALE.MAX.DURATION = 100000
 MAX.REACTION.TIME = 4000
 FEEDBACK.TIME = 1000
 block.length = 24
+LABEL.SCALE = .8 ## Skalowanie czcionki etykiet. 1 to normalna wielkość czcionki
 
 ## Parametry rysowania gabora i skali
 
@@ -193,21 +194,21 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
                        'pas' = {
                            mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem niewyraźnie', 'Widziałem dość wyraźnie', 'Widziałem bardzo wyraźnie'),
                                                 K = c('Nic nie widziałam', 'Widziałam niewyraźnie', 'Widziałam dość wyraźnie', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
-                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = F)
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = F, label.scale = LABEL.SCALE)
                        },
                        'cpas' = {
                            mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem niewyraźnie', 'Widziałem dość wyraźnie', 'Widziałem bardzo wyraźnie'),
                                                 K = c('Nic nie widziałam', 'Widziałam niewyraźnie', 'Widziałam dość wyraźnie', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
-                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = T)
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = T, label.scale = LABEL.SCALE)
                        },
                        'ias' = {
                            mp = draw.scale(rep("", 11), gradient  = T,
-                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = F)
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = F, label.scale = LABEL.SCALE)
                        },
                        'cs' = {
                            mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem bardzo wyraźnie'),
                                                 K = c('Nic nie widziałam', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
-                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = T)
+                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = T, label.scale = LABEL.SCALE)
                        })
                 WINDOW$display()
             }
