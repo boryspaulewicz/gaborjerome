@@ -208,7 +208,8 @@ trial.code = function(trial, side = 'left', duration = 1000, withscale = 1, feed
                        'cs' = {
                            mp = draw.scale(list(M = c('Nic nie widziałem', 'Widziałem bardzo wyraźnie'),
                                                 K = c('Nic nie widziałam', 'Widziałam bardzo wyraźnie'))[[USER.DATA$gender]],
-                                           background.color = c(.5, .5, .5), position = scale.position, draw.bar = T, label.scale = LABEL.SCALE)
+                               background.color = c(.5, .5, .5), position = scale.position, draw.bar = T, label.scale = LABEL.SCALE,
+                                           center.labels = T)
                        })
                 WINDOW$display()
             }
@@ -243,7 +244,7 @@ docx.instr = function(file, ask.if.done = T){
 
 TASK.NAME <<- 'gaborjerome'
 
-cnd = db.random.condition(c('pas'))
+cnd = gui.choose.item(c('pas', 'cpas', 'ias', 'cs')) ## db.random.condition(c('pas'))
 
 docx.instr(c(pas = 'InstrukcjaPAS.docx', cpas = 'InstrukcjaCPAS.docx', ias = 'InstrukcjaIAS.docx', cs = 'InstrukcjaCS.docx')[cnd])
 
@@ -259,7 +260,7 @@ docx.instr('Instrukcja1.docx')
 
 ## Trening 1, 500 ms 8 prób bez skali
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd,
-                                                    withscale = 0, feedback = 1, duration = 500),
+                                                    withscale = 1, feedback = 1, duration = 500), ## było withscale = 0
                                         b = 4)
 
 docx.instr('Instrukcja2.docx')
