@@ -244,7 +244,7 @@ docx.instr = function(file, ask.if.done = T){
 
 TASK.NAME <<- 'gaborjerome'
 
-cnd = gui.choose.item(c('pas', 'cpas', 'ias', 'cs')) ## db.random.condition(c('pas'))
+cnd = db.random.condition(c('ias'))
 
 docx.instr(c(pas = 'InstrukcjaPAS.docx', cpas = 'InstrukcjaCPAS.docx', ias = 'InstrukcjaIAS.docx', cs = 'InstrukcjaCS.docx')[cnd])
 
@@ -272,10 +272,10 @@ run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), s
 
 docx.instr('Instrukcja3.docx')
 
-## Etap właściwy, 96 prób na każdy czas ze skalą, różne czasy
+## Etap właściwy, 80 prób na każdy czas ze skalą, różne czasy
 run.trials(trial.code, condition = cnd, expand.grid(side = c('left', 'right'), scale = cnd, stage = 'test',
                                                     withscale = 1, feedback = 0, duration = c(16, 32, 64, 128)),
-                                        b = 24, record.session = T)
+                                        b = 40, record.session = T)
 
 docx.instr('Instrukcja4.docx', F)
 
