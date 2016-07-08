@@ -244,7 +244,7 @@ docx.instr = function(file, ask.if.done = T){
 
 TASK.NAME <<- 'gaborjerome'
 
-cnd = db.random.condition(c('cpas'))
+cnd = db.random.condition(c('ias'))
 
 docx.instr(c(pas = 'InstrukcjaPAS.docx', cpas = 'InstrukcjaCPAS.docx', ias = 'InstrukcjaIAS.docx', cs = 'InstrukcjaCS.docx')[cnd])
 
